@@ -40,7 +40,10 @@ SELECT
       ,'' AS DealerPrice
       ,'' AS Class
       ,'' AS Style
+      ,PM.ProductModelID
       ,PM.Name AS ModelName
+      ,PC.ProductCategoryID
+      ,PC.Name AS ProductCategory
       ,PDEN.Description AS EnglishDescription
       ,PDFR.Description AS FrenchDescription
       ,PDCH.Description AS ChineseDescription
@@ -82,3 +85,35 @@ FROM
 adventureworks.adventureworks_bronze.salesorderheader SOH
 INNER JOIN adventureworks.adventureworks_bronze.salesorderdetail SOD ON SOH.SalesOrderID = SOD.SalesOrderID
 LEFT OUTER JOIN adventureworks.adventureworksdw.dim_product DP ON SOD.ProductID = DP.ProductID
+
+-- COMMAND ----------
+
+SELECT DISTINCT OrderDate
+FROM
+adventureworks.adventureworks_bronze.salesorderheader
+UNION
+SELECT DISTINCT ShipDate
+FROM
+adventureworks.adventureworks_bronze.salesorderheader
+UNION
+SELECT DISTINCT DueDate
+FROM
+adventureworks.adventureworks_bronze.salesorderheader
+
+-- COMMAND ----------
+
+SELECT * FROM adventureworks.adventureworksdw.fact_internetsales
+
+-- COMMAND ----------
+
+SELECT CA.AddressType, CA.CustomerID, CA.AddressID,
+C.* EXCEPT(C.CustomerID, C.rowguid, C.ModifiedDate),
+A.* EXCEPT(A.AddressID, A.rowguid, A.ModifiedDate)
+FROM
+adventureworks.adventureworks.customeraddress CA
+LEFT OUTER JOIN adventureworks.adventureworks.customer C ON CA.CustomerID = C.CustomerID
+LEFT OUTER JOIN adventureworks.adventureworks.address A ON CA.AddressID = A.AddressID
+
+-- COMMAND ----------
+
+SELECT date_format(current_date(), 'yyyyMMdd')

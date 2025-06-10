@@ -9,11 +9,14 @@ resources:
         - task_key: DLT_AdventureWorks
           pipeline_task:
             pipeline_id: 197c7848-389e-4a37-9de4-d4986bc8a82c
-
-      # tasks:
-      #   - task_key: notebook_task
-      #     notebook_task:
-      #       notebook_path: ..AdventureWorks/AdventureWorksETL/explorations/SQL Testing.ipynb
+        - task_key: Product_agg
+          depends_on:
+            - task_key: DLT_AdventureWorks
+          sql_task:
+            file:
+              path: ../Reporting/Reporting.sql
+              source: WORKSPACE
+            warehouse_id: 77d1c7472be06346
       # email_notifications:
       #   no_alert_for_skipped_runs: true
       #   on_failure:

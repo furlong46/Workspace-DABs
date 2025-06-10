@@ -19,7 +19,7 @@ targets:
     workspace:
       host: https://adb-5343834423590926.6.azuredatabricks.net
       # We always use /Users/leo.furlong@databricks.com for all resources to make sure we only have a single copy.
-      root_path: /Users/leo.furlong@databricks.com/.bundle/${bundle.name}/${bundle.target}
+      root_path: /DABs_Prod_Demo/.bundle/${bundle.name}/${bundle.target}
     run_as:
       # This runs as leo.furlong@databricks.com in production. We could also use a service principal here,
       # see https://docs.databricks.com/dev-tools/bundles/permissions.html.

@@ -16,4 +16,4 @@ INNER JOIN adventureworks.adventureworks.salesorderdetail SOD ON SOH.SalesOrderI
 LEFT OUTER JOIN dim_product DP ON SOD.ProductID = DP.ProductID
 LEFT OUTER JOIN dim_customer DC_Ship ON SOH.CustomerID = DC_Ship.CustomerID AND SOH.ShipToAddressID = DC_Ship.AddressID
 LEFT OUTER JOIN dim_customer DC_Bill ON SOH.CustomerID = DC_Bill.CustomerID AND SOH.BillToAddressID = DC_Bill.AddressID
--- Please edit the sample below 
+CLUSTER BY (ProductKey, Order_DateKey, Ship_CustomerKey)

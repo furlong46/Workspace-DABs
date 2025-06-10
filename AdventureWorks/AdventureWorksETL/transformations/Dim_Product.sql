@@ -60,3 +60,4 @@ LEFT OUTER JOIN (SELECT ProductModelID, Description FROM DESCLookup WHERE TRIM(C
 
 SELECT row_number() OVER (ORDER BY ProductID) AS ProductKey, *
 FROM Source
+CLUSTER BY (ProductKey)

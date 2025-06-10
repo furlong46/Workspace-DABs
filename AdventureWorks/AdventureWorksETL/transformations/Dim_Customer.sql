@@ -10,3 +10,4 @@ FROM
 adventureworks.adventureworks.customeraddress CA
 LEFT OUTER JOIN adventureworks.adventureworks.customer C ON CA.CustomerID = C.CustomerID
 LEFT OUTER JOIN adventureworks.adventureworks.address A ON CA.AddressID = A.AddressID
+CLUSTER BY (CustomerKey)

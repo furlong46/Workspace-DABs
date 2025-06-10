@@ -35,3 +35,4 @@ SELECT
   dayofweek(calendarDate) AS DayOfWeekNumber,
   date_format(calendarDate, 'EEEE') as DayofWeek
 FROM source_dates_explode
+CLUSTER BY (DateKey)

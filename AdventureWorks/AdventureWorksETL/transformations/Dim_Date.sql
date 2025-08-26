@@ -1,6 +1,3 @@
-
--- Please edit the sample below
-
 CREATE VIEW source_dates 
 AS
 SELECT DISTINCT OrderDate AS source_date
@@ -22,7 +19,19 @@ select explode(sequence(
   (SELECT MAX(source_date) FROM source_dates), 
   interval 1 day)) as calendarDate;
 
-CREATE MATERIALIZED VIEW dim_date
+
+CREATE MATERIALIZED VIEW dim_date (
+  DateKey	int,
+  Date	timestamp,
+  DayofMonth	int,
+  MonthNumber	int,
+  Month	string,
+  YearMonthInt	int,
+  Year	int,
+  DayOfWeekNumber	int,
+  DayofWeek	string,
+  CONSTRAINT dim_date_pk PRIMARY KEY(DateKey)
+)
 AS 
 SELECT 
   year(calendarDate) * 10000 + month(calendarDate) * 100 + day(calendarDate) as DateKey,

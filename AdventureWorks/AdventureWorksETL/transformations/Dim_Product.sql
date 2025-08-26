@@ -1,6 +1,41 @@
--- Please edit the sample below
-
-CREATE MATERIALIZED VIEW dim_product AS
+CREATE MATERIALIZED VIEW dim_product (
+      ProductKey	int,
+      ProductID	int,
+      ProductAlternateKey	string,
+      ProductSubcategoryKey	int,
+      WeightUnitMeasureCode	string,
+      SizeUnitMeasureCode	string,
+      EnglishProductName	string,
+      StandardCost	decimal(19,4),
+      FinishedGoodsFlag	int,
+      Color	string,
+      SafetyStockLevel	string,
+      ReorderPoint	string,
+      ListPrice	decimal(19,4),
+      Size	string,
+      SizeRange	string,
+      Weight	decimal(8,2),
+      DaysToManufacture	string,
+      ProductLine	string,
+      DealerPrice	string,
+      Class	string,
+      Style	string,
+      ModelName	string,
+      EnglishDescription	string,
+      FrenchDescription	string,
+      ChineseDescription	string,
+      ArabicDescription	string,
+      HebrewDescription	string,
+      ThaiDescription	string,
+      GermanDescription	string,
+      JapaneseDescription	string,
+      TurkishDescription	string,
+      StartDate	timestamp,
+      EndDate	timestamp,
+      Status	string,
+      CONSTRAINT dim_product_pk PRIMARY KEY(ProductKey)
+) 
+AS
 WITH DESCLookup AS (
 SELECT 
 PMPD.ProductModelID,

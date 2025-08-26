@@ -117,3 +117,114 @@ LEFT OUTER JOIN adventureworks.adventureworks.address A ON CA.AddressID = A.Addr
 -- COMMAND ----------
 
 SELECT date_format(current_date(), 'yyyyMMdd')
+
+-- COMMAND ----------
+
+ALTER TABLE adventureworks.adventureworksdw.dim_customer
+ADD CONSTRAINT PK_dim_customer PRIMARY KEY (CustomerKey);
+
+-- COMMAND ----------
+
+SELECT date_diff(DAY, DATE('2008-06-01'), DATE('2008-12-31'))
+
+-- COMMAND ----------
+
+-- MAGIC %md
+-- MAGIC ### RESET
+
+-- COMMAND ----------
+
+ CREATE TABLE adventureworks.adventureworks.salesorderheader_back
+ AS
+SELECT * FROM adventureworks.adventureworks.salesorderheader WHERE SalesOrderID BETWEEN 71774 AND 71946;
+
+-- COMMAND ----------
+
+ CREATE TABLE adventureworks.adventureworks.salesorderdetail_back
+ AS
+ SELECT * FROM adventureworks.adventureworks.salesorderdetail WHERE SalesOrderID BETWEEN 71774 AND 71946;
+
+-- COMMAND ----------
+
+TRUNCATE TABLE adventureworks.adventureworks.salesorderheader;
+TRUNCATE TABLE adventureworks.adventureworks.salesorderdetail;
+
+-- COMMAND ----------
+
+INSERT INTO adventureworks.adventureworks.salesorderheader
+SELECT * FROM adventureworks.adventureworks.salesorderheader_back;
+
+-- COMMAND ----------
+
+INSERT INTO adventureworks.adventureworks.salesorderdetail
+SELECT * FROM adventureworks.adventureworks.salesorderdetail_back;
+
+-- COMMAND ----------
+
+BEGIN
+    DECLARE CNT INT DEFAULT 200;
+    DECLARE NUM INT DEFAULT 1;
+    
+    WHILE NUM <= 6275 DO
+
+        INSERT INTO adventureworks.adventureworks.salesorderheader
+        SELECT SalesOrderID * CNT AS SalesOrderID, 
+          RevisionNumber,
+          dateadd(OrderDate::date, NUM) AS OrderDate,
+          dateadd(DueDate::date, NUM) AS DueDate,
+          dateadd(ShipDate::date, NUM) AS ShipDate,
+          Status, OnlineOrderFlag, SalesOrderNumber, PurchaseOrderNumber, AccountNumber, CustomerID,ShipToAddressID, BillToAddressID, ShipMethod, CreditCardApprovalCode, SubTotal, TaxAmt, Freight, TotalDue, Comment, rowguid, ModifiedDate
+        FROM adventureworks.adventureworks.salesorderheader
+        WHERE SalesOrderID BETWEEN 71774 AND 71946;
+        
+        SET CNT = CNT + 1;
+        SET NUM = NUM + 1;
+        --SELECT CNT AS current_count;
+    END WHILE;
+END
+
+-- COMMAND ----------
+
+BEGIN
+    DECLARE CNT INT DEFAULT 200;
+    DECLARE NUM INT DEFAULT 1;
+    
+    WHILE NUM <= 6275 DO
+
+        INSERT INTO adventureworks.adventureworks.salesorderdetail
+        SELECT SalesOrderID * CNT AS SalesOrderID, 
+        SalesOrderDetailID, OrderQty, ProductID, UnitPrice, UnitPriceDiscount, LineTotal, rowguid, ModifiedDate
+        FROM adventureworks.adventureworks.salesorderdetail
+        WHERE SalesOrderID BETWEEN 71774 AND 71946;
+        
+        SET CNT = CNT + 1;
+        SET NUM = NUM + 1;
+        --SELECT CNT AS current_count;
+    END WHILE;
+END
+
+-- COMMAND ----------
+
+SELECT MAX(SalesOrderID) FROM adventureworks.adventureworks.salesorderdetail ORDER BY 1
+
+-- COMMAND ----------
+
+SELECT MAX(SalesOrderID) FROM adventureworks.adventureworks.salesorderheader ORDER BY 1
+--56,549,556 ->786
+--56,549,556 ->786
+
+-- COMMAND ----------
+
+SELECT MIN(OrderDate),MAX(OrderDate), date_diff(day,MIN(OrderDate),MAX(OrderDate)) FROM adventureworks.adventureworks.salesorderheader--318,696
+
+-- COMMAND ----------
+
+SELECT COUNT(1) FROM adventureworks.adventureworks.salesorderdetail--318,696
+
+-- COMMAND ----------
+
+SELECT MAX(Order_DateKey), COUNT(1) FROM adventureworks.adventureworksdw.fact_internetsales
+
+-- COMMAND ----------
+
+DESCRIBE EXTENDED adventureworks.adventureworksdw.fact_internetsales

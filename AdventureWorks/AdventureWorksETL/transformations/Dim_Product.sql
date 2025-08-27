@@ -2,7 +2,8 @@ CREATE MATERIALIZED VIEW dim_product (
       ProductKey	int,
       ProductID	int,
       ProductAlternateKey	string,
-      ProductSubcategoryKey	int,
+      ProductCategoryID	int,
+      ProductCategory	string,
       WeightUnitMeasureCode	string,
       SizeUnitMeasureCode	string,
       EnglishProductName	string,
@@ -50,7 +51,8 @@ Source AS (
 SELECT 
        P.ProductID
       ,P.ProductNumber AS ProductAlternateKey
-      ,P.ProductCategoryID AS ProductSubcategoryKey
+      ,P.ProductCategoryID
+      ,PC.Name AS ProductCategory
       ,'' AS WeightUnitMeasureCode
       ,'' AS SizeUnitMeasureCode
       ,P.Name AS EnglishProductName

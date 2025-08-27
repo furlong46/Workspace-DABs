@@ -8,7 +8,7 @@ resources:
       tasks:
         - task_key: DLT_AdventureWorks
           pipeline_task:
-            pipeline_id: 197c7848-389e-4a37-9de4-d4986bc8a82c
+            pipeline_id: 8d501f00-0cb0-423c-adeb-9344d7f398d5
         - task_key: Product_agg
           depends_on:
             - task_key: DLT_AdventureWorks
@@ -17,6 +17,36 @@ resources:
               path: ../Reporting/Reporting.sql
               source: WORKSPACE
             warehouse_id: 77d1c7472be06346
+        - task_key: Power_BI_Refresh
+          depends_on:
+            - task_key: Product_agg
+          power_bi_task:
+            tables:
+              - name: dim_customer
+                catalog: adventureworks
+                schema: adventureworks_dw
+                storage_mode: IMPORT
+              - name: dim_date
+                catalog: adventureworks
+                schema: adventureworks_dw
+                storage_mode: IMPORT
+              - name: dim_product
+                catalog: adventureworks
+                schema: adventureworks_dw
+                storage_mode: IMPORT
+              - name: fact_internetsales
+                catalog: adventureworks
+                schema: adventureworks_dw
+                storage_mode: IMPORT
+            warehouse_id: 77d1c7472be06346
+            power_bi_model:
+              workspace_name: Azure SA
+              model_name: adventureworks-adventureworks_dw
+              storage_mode: IMPORT
+              authentication_method: OAUTH
+              overwrite_existing: false
+            connection_resource_name: powerbi
+            refresh_after_update: true
       # email_notifications:
       #   no_alert_for_skipped_runs: true
       #   on_failure:
